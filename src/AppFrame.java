@@ -1,9 +1,7 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.time.Period;
-import java.time.format.FormatStyle;
 import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,30 +23,34 @@ public class AppFrame extends JFrame implements ActionListener {
     private LinkedList linkedList = new LinkedList();
     private TaskLinkedList taskLinkedList = new TaskLinkedList();
     private JScrollPane scrollPane;
-    private JLabel B,C, inputTaskLabel,dueDateLabel;
+    private JLabel logoBand, inputTaskLabel,dueDateLabel;
     public AppFrame() throws Exception {
         //frame init
         this.setSize(440, 445);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Doodle-List");
         this.getContentPane().setBackground(new Color(171, 206, 215));
-        //add new setting
+
         //label
         inputTaskLabel = new JLabel("input Task :");
         inputTaskLabel.setBounds(20, 100, 100,25);
         add(inputTaskLabel);
-        //duedate label
+
+        //due date label
         dueDateLabel = new JLabel("Due Date :");
         dueDateLabel.setBounds(300, 100, 100, 25);
         add(dueDateLabel);
+
         //text field
         text = new JTextField();
         text.setBounds(15, 80+40, 280, 25);
         add(text);
+
         //duedate field
         dueDate = new JTextField();
         dueDate.setBounds(295, 120, 125, 25);
         add(dueDate);
+
         //add button
         addButton = new JButton(" + ADD ");
         addButton.setBounds(20, 160, 90, 25);
@@ -58,6 +59,7 @@ public class AppFrame extends JFrame implements ActionListener {
         addButton.setBorder ( BorderFactory.createLineBorder ( Color.black, 2 ) );
         addButton.addActionListener(this);
         add(addButton);
+
         //delete button
         deleteButton = new JButton(" - DELETE ");
         deleteButton.setBackground ( Color.BLACK );
@@ -66,6 +68,7 @@ public class AppFrame extends JFrame implements ActionListener {
         deleteButton.setBounds(130, 160, 90, 25);
         deleteButton.addActionListener(this);
         add(deleteButton);
+
         //list
         listModel = new DefaultListModel();
         list = new JList(listModel);
@@ -75,71 +78,13 @@ public class AppFrame extends JFrame implements ActionListener {
         scrollPane.setViewportView(list);
         scrollPane.setBounds(20, 205, 400, 200);
         add(scrollPane);
-        //show button that show current data in linked list
-//        show = new JButton(" SHOW ");
-//        show.setBackground ( Color.BLACK );
-//        show.setForeground ( Color.WHITE );
-//        show.setBorder ( BorderFactory.createLineBorder ( Color.WHITE, 2 ) );
-//        show.setBounds(455, 110+110, 90, 30);
-//        show.addActionListener(this);
-//        add(show);
+
         //Add Picture
         ImageIcon imageIcon = new ImageIcon(new ImageIcon("DDT.png").getImage().getScaledInstance(350/2, 150/2, Image.SCALE_DEFAULT));
         this.setIconImage(imageIcon.getImage());
-        B = new JLabel("", (Icon) imageIcon,JLabel.CENTER);
-        B.setBounds(120,15,((Icon) imageIcon).getIconWidth(),((Icon) imageIcon).getIconHeight());
-        add(B);
-
-//        ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("bg1.png").getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT));
-//        C = new JLabel("", (Icon) imageIcon1,JLabel.CENTER);
-//        C.setBounds(0,0,((Icon) imageIcon1).getIconWidth(),((Icon) imageIcon1).getIconHeight());
-//        add(C);
-
-//        //text field
-//        text = new JTextField();
-//        text.setBounds(20, 10, 100, 25);
-//        add(text);
-//        //input due date
-//        dueDate = new JTextField();
-//        dueDate.setBounds(20, 30, 100, 25);
-//        add(dueDate);
-//        //add button
-//        addButton = new JButton("Add");
-//        addButton.setBounds(140, 10, 80, 20);
-//        addButton.addActionListener(this);
-//        add(addButton);
-//        //delete button
-//        deleteButton = new JButton("Delete");
-//        deleteButton.setBounds(240, 10, 80, 20);
-//        deleteButton.addActionListener(this);
-//        add(deleteButton);
-//
-//        //list
-//        listModel = new DefaultListModel();
-//        list = new JList(listModel);
-//        list.setBounds(20, 60, 360, 200);
-//        list.setVisibleRowCount(12);
-//        scrollPane = new JScrollPane();
-//        scrollPane.setViewportView(list);
-//        scrollPane.setBounds(20, 50, 360, 200);
-//        add(scrollPane);
-//
-//        //show button that show current data in linked list
-//        show = new JButton("show");
-//        show.setBounds(20, 260, 80, 20);
-//        show.addActionListener(this);
-//        add(show);
-//        //showPoint is show the selected not node
-//        showPoint = new JButton("pointer");
-//        showPoint.setBounds(120, 260, 80, 20);
-//        showPoint.addActionListener(this);
-//        add(showPoint);
-//
-//        //sort
-//        sortBtn = new JButton("Sort");
-//        sortBtn.setBounds(220, 260, 80, 20);
-//        sortBtn.addActionListener(this);
-//        add(sortBtn);
+        logoBand = new JLabel("", (Icon) imageIcon,JLabel.CENTER);
+        logoBand.setBounds(120,15,((Icon) imageIcon).getIconWidth(),((Icon) imageIcon).getIconHeight());
+        add(logoBand);
 
         //load all list to JList
         loadList();
@@ -186,20 +131,20 @@ public class AppFrame extends JFrame implements ActionListener {
                 temp = new Task(inputText, LocalDate.now(),localDateTemp);
                 taskLinkedList.insert(temp);
                 sorted();
-//                listModel.addElement(temp.getTaskTitle() + "  Input Date:" + temp.getInputDate() + "  Due Date:" + temp.getDueDate());
             } else if (e.getSource() == deleteButton) {
                 int index = list.getSelectedIndex();
                 if (index != -1) {
                     //get text from 
                     String text = (String)listModel.get(index);
                     System.out.println(text);
+
                     //convert to Object type
                     String []subText = text.split(",");
                     String iterSubText = subText[0];
                     System.out.println("sub text is :"+iterSubText);
                     Object obj = convertNameToTask(iterSubText);
 
-
+                    //add data to each node and JList
                     taskLinkedList.delete(obj);
                     listModel.remove(index);
 
@@ -229,7 +174,7 @@ public class AppFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, listModel.get(index));
                 }
             } else if (e.getSource() == sortBtn) {
-                Task temp;
+                //sort here
             }
         }catch (Exception ex){
             JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -241,6 +186,7 @@ public class AppFrame extends JFrame implements ActionListener {
             if(!listDirectory.exists()){
                 //create directory
                 listDirectory.mkdir();
+
                 //create new file in recent created directory
                 File listFile = new File(listDirectory, "/list_" + LoginFrame.folderName + ".txt");
                 listFile.createNewFile();
@@ -259,7 +205,6 @@ public class AppFrame extends JFrame implements ActionListener {
                             LocalDate s2 = LocalDate.parse(substring[2], formatter);
                             temp = new Task(substring[0],s1,s2);
                             taskLinkedList.insert(temp);
-//                            listModel.addElement(lines.get(i));
                         }
                     }
                     sorted();
@@ -272,6 +217,7 @@ public class AppFrame extends JFrame implements ActionListener {
 
     public void sorted(){
         try {
+            //loop to get all task in linked list
             ArrayList<Task> tasks = new ArrayList<>();
             taskLinkedList.findFirst();
             while (taskLinkedList.current != null) {
@@ -279,6 +225,7 @@ public class AppFrame extends JFrame implements ActionListener {
                 tasks.add(task);
                 taskLinkedList.current = taskLinkedList.current.getNextNode();
             }
+            //then calculate different between due dat and input date of each node
             int[] dateDiff = new int[tasks.size()];
             for(int i = 0;i < tasks.size(); i++){
                 int days = Period.between(tasks.get(i).getInputDate(),tasks.get(i).getDueDate()).getDays();
@@ -286,6 +233,7 @@ public class AppFrame extends JFrame implements ActionListener {
             }
             Arrays.sort(dateDiff);
             System.out.println(Arrays.toString(dateDiff));
+
             //set Node empty
             taskLinkedList.first = null;
             taskLinkedList.current = null;
@@ -298,12 +246,14 @@ public class AppFrame extends JFrame implements ActionListener {
                     if(days == dateDiff[i]){
                         //insert to node
                         taskLinkedList.insert(task);
+
                         //add to JList
                         String title = ((Task) taskLinkedList.current.getData()).getTaskTitle();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         String createDate = formatter.format(((Task) taskLinkedList.current.getData()).getInputDate());
                         String dueDate = formatter.format(((Task) taskLinkedList.current.getData()).getDueDate());
 
+                        //add element to JList in order => title of task, input Date, due date
                         listModel.addElement(title+","+createDate+","+dueDate);
                         break;
                     }
@@ -317,6 +267,7 @@ public class AppFrame extends JFrame implements ActionListener {
 
     public Task convertNameToTask(String taskName){
         try {
+            //loop to get all Task of linked list
             ArrayList<Task> tasks = new ArrayList<>();
             taskLinkedList.findFirst();
             while(taskLinkedList.current != null){
@@ -324,6 +275,7 @@ public class AppFrame extends JFrame implements ActionListener {
                 tasks.add(task);
                 taskLinkedList.current = taskLinkedList.current.getNextNode();
             }
+            //find specific task by argument taskName
             for(Task task : tasks){
                 if(task.getTaskTitle().equals(taskName)){
                     return task;

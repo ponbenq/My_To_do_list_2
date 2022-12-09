@@ -19,40 +19,28 @@ public class LoginFrame  implements ActionListener {
     JLabel loginLabel;
     public static String folderName;
     public LoginFrame (){
-        // Set the Nimbus look and feel
-        try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//            UIManager.put("nimbusBase", new Color(43, 52, 89));
-//            UIManager.put("control", new Color(0, 0, 0));
-//            UIManager.put("text", new Color(255, 255, 255));
-//            UIManager.put("TextField.background", new Color(204, 204, 196));
-//            UIManager.put("PasswordField.background", new Color(0, 0, 0));
-//            UIManager.put("List.background", new Color(0, 0 ,0));
-//            UIManager.put("Button.background", new Color(0, 204, 196));
-//            UIManager.put("Button.foreground", new Color(255, 255, 255));
-
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-        }
         //frame init
         loginFrame = new JFrame();
         loginFrame.setSize(400, 320);
         loginFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         loginFrame.getContentPane().setBackground(new Color(171, 206, 215));
+
         //placing the components
         loginLabel = new JLabel("Login");
         loginLabel.setBounds(180, 60, 100, 20);
         loginFrame.add(loginLabel);
 
+        //text field
         usernameField = new JTextField();
         usernameField.setBounds(150, 100, 100, 25);
         loginFrame.add(usernameField);
 
+        //password field
         passwordField = new JPasswordField();
         passwordField.setBounds(150, 140, 100, 25);
         loginFrame.add(passwordField);
 
+        //login button
         submitButton = new JButton("Login");
         submitButton.setBounds(160, 180, 80, 20);
         submitButton.addActionListener(this);
@@ -73,6 +61,7 @@ public class LoginFrame  implements ActionListener {
                 BufferedReader reader = new BufferedReader(new FileReader("src/authentication-details.txt"));
                 String line;
 
+                //initial string to collect username and password
                 String user = "";
                 String pass = "";
                 while((line = reader.readLine()) != null){
@@ -85,29 +74,14 @@ public class LoginFrame  implements ActionListener {
                 }
                 reader.close();
 
-//
-//                Scanner scanner = new Scanner(file);
-//                //get string from text file
-//                String username = scanner.nextLine();
-//                String password = scanner.nextLine();
-
-                //string concatenated when found character = ':' for username and password
-//                String user = "";
-//                String pass = "";
-//                for(int i = 0; i <= username.length() - 1; i++){
-//                    user += username.charAt(i);
-//                }
-//                for(int i = 0; i <= password.length() - 1; i++){
-//                    pass += password.charAt(i);
-//                }
-                //display username and password for checking
-//                System.out.println(user + " / " + pass);
                 //get each character from passwordField it return char
                 char[] passwordCollected = passwordField.getPassword();
                 String passField = "";
                 for(char p : passwordCollected){
                     passField += p;
                 }
+
+                //authentication condition
                 if(usernameField.getText().equals(user) && passField.equals(pass)) {
                     JOptionPane.showMessageDialog(null, "Login Successfully!");
                     try {
